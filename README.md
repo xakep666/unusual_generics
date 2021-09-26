@@ -9,5 +9,10 @@ Unusual Generics
 in Go designed to reduce boilerplate for container data types like lists, graphs, etc. and functions like map, filter, reduce...
 
 But it's possible to use them in other (I've named them 'unusual') cases. I'm collecting such cases in this repository.
+What's inside:
+* [Type to emulate JS 'undefined' for JSON](json_undefined.go)
+* [Type to deal with non-standard time formats in JSON/XML/etc.](time_format.go)
 
 Feel free to open issue or pull request to add new one.
+
+Note that until 1.18 release documentation on 'pkg.go.dev' will not be rendered.
