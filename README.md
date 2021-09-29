@@ -12,6 +12,7 @@ But it's possible to use them in other (I've named them 'unusual') cases. I'm co
 What's inside:
 * [Type to emulate JS 'undefined' for JSON](json_undefined.go)
 * [Type to deal with non-standard time formats in JSON/XML/etc.](time_format.go)
+* [Function to get pointer from literal in one line](ptr.go)
 
 Feel free to open issue or pull request to add new one.
 
