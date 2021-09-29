@@ -8,11 +8,7 @@ import (
 // This type must be instantiated with interface implementation that returns layout and optionally location.
 // Implementation must be able to work when it's zero-value.
 // See 'time_format_test.go' for usage example.
-type TimeFormatted[T TimeLayoutProvider] struct {
-	Time time.Time
-
-	layoutProvider T
-}
+type TimeFormatted[T TimeLayoutProvider] time.Time
 
 // TimeLayoutProvider is a setup interface for TimeFormatted.
 type TimeLayoutProvider interface {
@@ -24,23 +20,42 @@ type TimeLayoutProvider interface {
 	TimeLocation() *time.Location
 }
 
-func (tf *TimeFormatted[T]) UnmarshalText(text []byte) error {
-	var err error
+// FromTime constructs TimeFormatted from time.Time.
+func FromTime[T TimeLayoutProvider](t time.Time) TimeFormatted[T] { return TimeFormatted[T](t) }
 
-	if loc := tf.layoutProvider.TimeLocation(); loc != nil {
-		tf.Time, err = time.ParseInLocation(tf.layoutProvider.TimeLayout(), string(text), loc)
+func (tf *TimeFormatted[T]) UnmarshalText(text []byte) error {
+	var (
+		err error
+		t   time.Time
+		p   T
+	)
+
+	if loc := p.TimeLocation(); loc != nil {
+		t, err = time.ParseInLocation(p.TimeLayout(), string(text), loc)
 	} else {
-		tf.Time, err = time.Parse(tf.layoutProvider.TimeLayout(), string(text))
+		t, err = time.Parse(p.TimeLayout(), string(text))
 	}
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	*tf = TimeFormatted[T](t)
+
+	return nil
 }
 
 func (tf TimeFormatted[T]) MarshalText() ([]byte, error) {
-	t := tf.Time
-	if loc := tf.layoutProvider.TimeLocation(); loc != nil {
+	var p T
+
+	t := time.Time(tf)
+
+	if loc := p.TimeLocation(); loc != nil {
 		t = t.In(loc)
 	}
 
-	return []byte(t.Format(tf.layoutProvider.TimeLayout())), nil
+	return []byte(t.Format(p.TimeLayout())), nil
 }
+
+// Time gives access to original time.Time to call methods on it.
+func (tf TimeFormatted[T]) Time() time.Time { return time.Time(tf) }

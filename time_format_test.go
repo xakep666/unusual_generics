@@ -33,14 +33,14 @@ func TestTimeFormatted(t *testing.T) {
 
 	t.Run("MarshalJSON", func(t *testing.T) {
 		b, err := json.Marshal(timeValues{
-			TimeA: unusual_generics.TimeFormatted[noLocationProvider]{
-				Time: time.Date(2021, time.September, 26, 10, 0, 0, 0, testZone),
-			},
-			TimeB: unusual_generics.TimeFormatted[withLocationProvider]{
-				Time: time.Date(2021, time.September, 26, 10, 0, 0, 0,
+			TimeA: unusual_generics.FromTime[noLocationProvider](
+				time.Date(2021, time.September, 26, 10, 0, 0, 0, testZone),
+			),
+			TimeB: unusual_generics.FromTime[withLocationProvider](
+				time.Date(2021, time.September, 26, 10, 0, 0, 0,
 					time.FixedZone("test2", 2*int(time.Hour.Seconds())),
 				),
-			},
+			),
 		})
 		require.NoError(t, err)
 
@@ -60,15 +60,15 @@ func TestTimeFormatted(t *testing.T) {
 
 		assert.Equal(t,
 			time.Date(2021, time.September, 26, 9, 0, 0, 0, time.UTC),
-			values.TimeA.Time.UTC(),
+			values.TimeA.Time().UTC(),
 		)
 
-		_, off := values.TimeA.Time.Zone()
+		_, off := values.TimeA.Time().Zone()
 		assert.Equal(t, int(time.Hour.Seconds()), off)
 
 		assert.Equal(t,
 			time.Date(2021, time.September, 26, 9, 0, 0, 0, testZone),
-			values.TimeB.Time,
+			values.TimeB.Time(),
 		)
 	})
 }
