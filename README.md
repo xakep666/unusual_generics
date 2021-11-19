@@ -14,6 +14,7 @@ What's inside:
 * [Type to deal with non-standard time formats in JSON/XML/etc.](time_format.go)
 * [Function to get pointer from literal in one line](ptr.go)
 * [Generic version of x/sync/singleflight.Group](singleflight.go)
+* [Reflect(lite)-free versions of errors.Is and errors.As with upgrade](errors.go)
 
 Feel free to open issue or pull request to add new one.
 

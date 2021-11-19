@@ -1,6 +1,5 @@
 package unusual_generics_test
 
-
 import (
 	"bytes"
 	"errors"
