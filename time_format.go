@@ -12,6 +12,8 @@ type TimeFormatted[T TimeLayoutProvider] time.Time
 
 // TimeLayoutProvider is a setup interface for TimeFormatted.
 type TimeLayoutProvider interface {
+	~struct{} // constrain base type to avoid runtime errors on zero-value method calls
+
 	// TimeLayout must return time layout string in Go time format (see 'time' package).
 	TimeLayout() string
 
